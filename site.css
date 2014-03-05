@@ -1,0 +1,14 @@
+body {
+  font-family: Helvetica;
+  background-image: url('http://iamdaveknockles.files.wordpress.com/2011/04/motherfucker.jpg');
+}
+li {
+  background: green;
+}
+li:hover {
+  background: yellow;
+  cursor: pointer;
+}
+h1 {
+  background: green;
+}

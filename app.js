@@ -2,17 +2,59 @@
 (function() {
   "use strict";
   $(function() {
+    $("input").focus();
     return $("form").on("submit", function(event) {
-      var searchTerm;
+      var movieData, searchTerm;
+      alert("You are a motherfucker.");
       event.preventDefault();
       searchTerm = $("input").val();
-      return $.ajax({
-        url: "http://www.omdbapi.com/?",
+      movieData = $.ajax({
+        url: "http://www.omdbapi.com",
         method: "get",
         data: {
           s: searchTerm
         },
         dataType: "json"
+      });
+      movieData.done(function(data) {
+        var li, movie, _i, _len, _ref, _results;
+        $("input").val("");
+        $(".result").html("");
+        _ref = data["Search"];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          movie = _ref[_i];
+          li = $("<li data-imdbid='" + movie.imdbID + "'>" + movie.Title + "</li>");
+          _results.push($(".result").append(li));
+        }
+        return _results;
+      });
+      return $(".result").delegate("li", "click", function(event) {
+        var fuckText, movieId, movieInfo, num;
+        movieId = this.dataset.imdbid;
+        movieInfo = $.ajax({
+          url: "http://www.omdbapi.com",
+          method: "get",
+          data: {
+            i: movieId
+          },
+          dataType: "json"
+        });
+        fuckText = ["Fuck you.", "Go fuck yourself.", "DIAF", "You little fuck nugget.", "Holy shit fuck.", "These results aren't even correct.", "Why the fuck are you still here?", "You're kind of dumb, aren't you?", "Fucking cracker.", "I hate you.", "I fucking hate you."];
+        num = Math.floor((Math.random() * 10) + 1);
+        alert(fuckText[num]);
+        return movieInfo.done(function(data) {
+          var img;
+          if (data["Poster"] === "N/A") {
+            $("img").remove();
+            img = $("<img src='" + "http://www.mnit.ac.in/new/PortalProfile/images/faculty/noimage.jpg" + "'></img>");
+            return $(".result").append(img);
+          } else {
+            $("img").remove();
+            img = $("<img src='" + data["Poster"] + "'></img>");
+            return $(".result").append(img);
+          }
+        });
       });
     });
   });
